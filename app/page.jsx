@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import Link from "next/link";
 import { filterPosts, getArchivePeriod } from "./archive.js";
@@ -19,11 +19,18 @@ export default function Home() {
   const [category, setCategory] = useState("전체");
   const [format, setFormat] = useState("전체");
   const [query, setQuery] = useState("");
+  const lastTrackedQuery = useRef(null);
   const visiblePosts = useMemo(() => filterPosts(posts, { category, format, query }), [category, format, query]);
   const archivePeriod = getArchivePeriod(visiblePosts.length > 0 ? visiblePosts : posts);
-  const reset = () => { setCategory("전체"); setFormat("전체"); setQuery(""); };
+  const reset = () => { setCategory("전체"); setFormat("전체"); setQuery(""); lastTrackedQuery.current = null; };
   const selectCategory = (value) => { setCategory(value); track("filter_applied", { filter_type: "category", value }); };
   const selectFormat = (value) => { setFormat(value); track("filter_applied", { filter_type: "format", value }); };
+  const trackSearch = () => {
+    const normalizedQuery = query.trim();
+    if (!normalizedQuery || normalizedQuery === lastTrackedQuery.current) return;
+    lastTrackedQuery.current = normalizedQuery;
+    track("search_used", { query_length: normalizedQuery.length, results_count: visiblePosts.length });
+  };
 
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(createWebsiteJsonLd()) }} />
@@ -34,7 +41,7 @@ export default function Home() {
       <section className="controls" aria-label="글 필터">
         <fieldset className="filter-group"><legend>분야</legend>{categories.map((item) => <button type="button" aria-pressed={category === item} className={category === item ? "selected" : ""} key={item} onClick={() => selectCategory(item)}>{item}</button>)}</fieldset>
         <fieldset className="filter-group"><legend>형식</legend>{formats.map((item) => <button type="button" aria-pressed={format === item} className={format === item ? "selected" : ""} key={item} onClick={() => selectFormat(item)}>{item}</button>)}</fieldset>
-        <label className="search"><MagnifyingGlass aria-hidden="true" size={18} weight="bold" /><span>검색</span><input type="search" autoComplete="off" value={query} onChange={(event) => setQuery(event.target.value)} onBlur={() => query && track("search_used", { query_length: query.length, results_count: visiblePosts.length })} placeholder="제목, 태그로 찾아보세요" /></label>
+        <label className="search"><MagnifyingGlass aria-hidden="true" size={18} weight="bold" /><span>검색</span><input type="search" autoComplete="off" value={query} onChange={(event) => setQuery(event.target.value)} onBlur={trackSearch} placeholder="제목, 태그로 찾아보세요" /></label>
       </section>
       <div className="content-grid" id="archive">
         <aside className="month-mark" aria-label={`${archivePeriod.label} 기록`}><strong>{archivePeriod.month}<br />{archivePeriod.year}</strong><p>좋은 생각은<br />시간 속에서<br />더 깊어진다.</p></aside>

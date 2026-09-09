@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteFooter } from "../../components/site-footer.jsx";
 import { SiteHeader } from "../../components/site-header.jsx";
+import { TrackedSourceLink } from "../../components/tracked-source-link.jsx";
 import { findPublishedPostBySlug, formatPostDate, formatReadingTime, getPublishedPosts } from "../../lib/content/post.js";
 import { postFixtures } from "../../lib/content/posts.js";
 import { createBlogPostingJsonLd, createPageMetadata, serializeJsonLd } from "../../seo.js";
@@ -40,11 +41,11 @@ function PostBody({ blocks }) {
   </div>;
 }
 
-function Sources({ sources }) {
+function Sources({ sources, postSlug }) {
   return <section className="article-sources" aria-labelledby="sources-title">
     <h2 id="sources-title">참고한 자료</h2>
     {sources.length > 0
-      ? <ol>{sources.map((source) => <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer">{source.title}<span className="sr-only">(새 창)</span></a><span>{source.publisher} · {formatPostDate(source.accessedAt)} 확인</span></li>)}</ol>
+      ? <ol>{sources.map((source) => <li key={source.url}><TrackedSourceLink href={source.url} postSlug={postSlug}>{source.title}</TrackedSourceLink><span>{source.publisher} · {formatPostDate(source.accessedAt)} 확인</span></li>)}</ol>
       : <p>외부 자료를 인용하지 않은 개인적인 관찰과 사용 기록입니다.</p>}
   </section>;
 }
@@ -70,7 +71,7 @@ export default async function PostPage({ params }) {
           <p className="article-tags">{post.tags.map((tag) => `#${tag}`).join("  ")}</p>
         </header>
         <PostBody blocks={post.body} />
-        <Sources sources={post.sources} />
+        <Sources sources={post.sources} postSlug={post.slug} />
       </article>
       <SiteFooter />
     </main>

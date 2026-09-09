@@ -25,7 +25,7 @@
 | 4 | W-04 | 병합됨 | 글 상세 페이지와 출처 블록 | `feat/post-detail` | `feat(blog): 글 상세 페이지를 추가한다` | slug별 고유 페이지, 발행·수정일, 태그, 읽기 시간, 출처·기준 시점이 보인다 | 정적 경로·404·출처 표시 확인 |
 | 5 | W-05 | 병합됨 | 간결한 소개 페이지 | `feat/editorial-pages` | `feat(blog): 소개 페이지를 추가한다` | 사용자가 확정한 브랜드 소개 문장만 제공하고 데스크톱·모바일에서 자연스럽게 표시한다 | 링크·문서 구조·320px·390px 확인 |
 | 6 | W-06 | 병합됨 | SEO·GEO 공개 표면 | `feat/seo-geo-surface` | `feat(seo): 공개 글의 검색 메타데이터를 구성한다` | title, description, canonical, OG, `BlogPosting`, `WebSite`, sitemap, RSS, robots가 실제 공개 정보와 일치한다 | metadata 스냅샷, Schema Markup Validator, sitemap 확인 |
-| 7 | W-07 | 대기 | 분석 이벤트 계약과 관찰 화면 | `feat/analytics-foundation` | `feat(analytics): 공개 블로그 행동 지표 기반을 추가한다` | 조회·검색·필터 이벤트의 목적·속성·보존 방침이 문서화되고 PII 없이 전송된다 | 이벤트 단위 테스트, 브라우저 관찰 |
+| 7 | W-07 | 병합됨 | 분석 이벤트 계약과 개발용 검증 도구 | `feat/analytics-foundation` | `feat(analytics): 공개 블로그 행동 지표 기반을 추가한다` | 조회·검색·필터·출처 이벤트의 목적·속성·보존 방침이 문서화되고 개인 식별값 없이 검증된다 | 이벤트 단위 테스트, 개발자 도구 콘솔 확인 |
 | 8 | W-08 | 대기 | 공개 배포 품질 게이트 | `ci/public-quality-gate` | `ci(blog): 공개 배포 품질 게이트를 추가한다` | 접근성·빌드·핵심 경로·메타데이터 검증을 PR에서 재현 가능하게 실행한다 | CI 실행 결과, 실패 케이스 확인 |
 | 9 | W-09 | 대기 | Vercel 공개 배포 | `ci/vercel-public-deploy` | `ci(blog): 공개 블로그 배포를 연결한다` | 공개 앱만 Vercel에 배포되며 관리자 코드·비밀 키는 번들에 없다 | preview/production 배포, robots·sitemap 확인 |
 
@@ -50,4 +50,4 @@
 
 ## 지금 할 일
 
-다음 작업은 `W-07`이다. 조회·검색·필터 행동을 개인정보 없이 관찰할 수 있도록 분석 이벤트 계약과 로컬 관찰 방식을 먼저 설계한다.
+다음 작업은 `W-08`이다. 접근성·빌드·핵심 경로·메타데이터 검증을 PR에서 반복 실행할 수 있는 공개 배포 품질 게이트를 구성한다.
