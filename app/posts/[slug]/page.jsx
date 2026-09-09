@@ -4,11 +4,29 @@ import { SiteFooter } from "../../components/site-footer.jsx";
 import { SiteHeader } from "../../components/site-header.jsx";
 import { findPublishedPostBySlug, formatPostDate, formatReadingTime, getPublishedPosts } from "../../lib/content/post.js";
 import { postFixtures } from "../../lib/content/posts.js";
+import { createBlogPostingJsonLd, createPageMetadata, serializeJsonLd } from "../../seo.js";
 
 const posts = getPublishedPosts(postFixtures);
 
 export function generateStaticParams() {
   return posts.map(({ slug }) => ({ slug }));
+}
+
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const post = findPublishedPostBySlug(posts, slug);
+  if (!post) return { title: "글을 찾을 수 없습니다", robots: { index: false, follow: false } };
+
+  return createPageMetadata({
+    title: post.seo.title,
+    description: post.seo.description,
+    path: `/posts/${post.slug}`,
+    type: "article",
+    publishedAt: post.publishedAt,
+    updatedAt: post.updatedAt,
+    category: post.category,
+    tags: post.tags,
+  });
 }
 
 function PostBody({ blocks }) {
@@ -35,8 +53,10 @@ export default async function PostPage({ params }) {
   const { slug } = await params;
   const post = findPublishedPostBySlug(posts, slug);
   if (!post) notFound();
+  const jsonLd = createBlogPostingJsonLd(post);
 
   return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
     <a className="skip-link" href="#article">본문으로 건너뛰기</a>
     <main className="site-shell">
       <SiteHeader />

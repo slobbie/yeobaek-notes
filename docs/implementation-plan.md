@@ -23,8 +23,8 @@
 | 2 | W-02 | 병합됨 | 콘텐츠 계약과 fixture 분리 | `feat/content-contract` | `feat(content): 공개 글 콘텐츠 계약을 정의한다` | 글의 slug·제목·요약·날짜·분야·형식·태그·출처·수정 정보가 한 계약으로 관리된다 | 계약 단위 테스트, 목록 렌더링 |
 | 3 | W-03 | 병합됨 | 최신순 아카이브 완성 | `feat/archive-experience` | `feat(blog): 최신순 글 모아보기를 완성한다` | 현재 디자인의 분야·형식·검색·빈 결과·모바일 레이아웃이 실제 Next 화면에서 동작한다 | 키보드·검색·필터·반응형 수동 확인 |
 | 4 | W-04 | 병합됨 | 글 상세 페이지와 출처 블록 | `feat/post-detail` | `feat(blog): 글 상세 페이지를 추가한다` | slug별 고유 페이지, 발행·수정일, 태그, 읽기 시간, 출처·기준 시점이 보인다 | 정적 경로·404·출처 표시 확인 |
-| 5 | W-05 | PR 검토 | 소개·편집 원칙 페이지 | `feat/editorial-pages` | `feat(blog): 소개와 편집 원칙 페이지를 추가한다` | 익명 브랜드의 주제 범위, 수정 원칙, 문의 경로를 공개하고 콘텐츠 책임 주체를 설명한다 | 링크·문서 구조·모바일 확인 |
-| 6 | W-06 | 대기 | SEO·GEO 공개 표면 | `feat/seo-geo-surface` | `feat(seo): 공개 글의 검색 메타데이터를 구성한다` | title, description, canonical, OG, `BlogPosting`, `WebSite`, sitemap, RSS, robots가 실제 공개 정보와 일치한다 | metadata 스냅샷, JSON-LD/Rich Results Test, sitemap 확인 |
+| 5 | W-05 | 병합됨 | 간결한 소개 페이지 | `feat/editorial-pages` | `feat(blog): 소개 페이지를 추가한다` | 사용자가 확정한 브랜드 소개 문장만 제공하고 데스크톱·모바일에서 자연스럽게 표시한다 | 링크·문서 구조·320px·390px 확인 |
+| 6 | W-06 | 병합됨 | SEO·GEO 공개 표면 | `feat/seo-geo-surface` | `feat(seo): 공개 글의 검색 메타데이터를 구성한다` | title, description, canonical, OG, `BlogPosting`, `WebSite`, sitemap, RSS, robots가 실제 공개 정보와 일치한다 | metadata 스냅샷, Schema Markup Validator, sitemap 확인 |
 | 7 | W-07 | 대기 | 분석 이벤트 계약과 관찰 화면 | `feat/analytics-foundation` | `feat(analytics): 공개 블로그 행동 지표 기반을 추가한다` | 조회·검색·필터 이벤트의 목적·속성·보존 방침이 문서화되고 PII 없이 전송된다 | 이벤트 단위 테스트, 브라우저 관찰 |
 | 8 | W-08 | 대기 | 공개 배포 품질 게이트 | `ci/public-quality-gate` | `ci(blog): 공개 배포 품질 게이트를 추가한다` | 접근성·빌드·핵심 경로·메타데이터 검증을 PR에서 재현 가능하게 실행한다 | CI 실행 결과, 실패 케이스 확인 |
 | 9 | W-09 | 대기 | Vercel 공개 배포 | `ci/vercel-public-deploy` | `ci(blog): 공개 블로그 배포를 연결한다` | 공개 앱만 Vercel에 배포되며 관리자 코드·비밀 키는 번들에 없다 | preview/production 배포, robots·sitemap 확인 |
@@ -50,4 +50,4 @@
 
 ## 지금 할 일
 
-첫 실행 작업은 `R-00`이다. 기준 커밋을 만든 뒤 `main`을 같은 지점에 만들고 원격에 올려야 이후 `develop` 기반 PR 흐름을 시작할 수 있다. 이 작업은 현재 모든 파일이 아직 미추적 상태이므로, 커밋에 포함할 파일 목록을 먼저 PR 수준으로 검토한 뒤 진행한다.
+다음 작업은 `W-07`이다. 조회·검색·필터 행동을 개인정보 없이 관찰할 수 있도록 분석 이벤트 계약과 로컬 관찰 방식을 먼저 설계한다.
