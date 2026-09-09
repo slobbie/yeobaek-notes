@@ -9,6 +9,7 @@ import { SiteHeader } from "./components/site-header.jsx";
 import { track } from "./lib/analytics.js";
 import { formatPostDate, formatReadingTime, getPublishedPosts, POST_CATEGORIES, POST_FORMATS } from "./lib/content/post.js";
 import { postFixtures } from "./lib/content/posts.js";
+import { createWebsiteJsonLd, serializeJsonLd } from "./seo.js";
 
 const posts = getPublishedPosts(postFixtures);
 const categories = ["전체", ...POST_CATEGORIES];
@@ -25,6 +26,7 @@ export default function Home() {
   const selectFormat = (value) => { setFormat(value); track("filter_applied", { filter_type: "format", value }); };
 
   return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(createWebsiteJsonLd()) }} />
     <a className="skip-link" href="#archive">본문으로 건너뛰기</a>
     <main className="site-shell">
       <SiteHeader home onBrandClick={reset} />

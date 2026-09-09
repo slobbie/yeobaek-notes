@@ -1,8 +1,34 @@
 import "./globals.css";
+import { createPageMetadata, siteConfig } from "./seo.js";
+
+const homeTitle = "여백의 노트 — 생각을 기록하는 개인 아카이브";
+const homeMetadata = createPageMetadata({
+  title: homeTitle,
+  description: siteConfig.description,
+  path: "/",
+});
 
 export const metadata = {
-  title: "여백의 노트 — 생각을 기록하는 개인 아카이브",
-  description: "경제, 기술, 생활과 그 사이에서 발견한 것을 기록합니다.",
+  metadataBase: new URL(siteConfig.url),
+  ...homeMetadata,
+  title: {
+    default: homeTitle,
+    template: `%s | ${siteConfig.name}`,
+  },
+  applicationName: siteConfig.name,
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({ children }) {

@@ -1,10 +1,12 @@
 import { SiteFooter } from "../components/site-footer.jsx";
 import { SiteHeader } from "../components/site-header.jsx";
+import { createPageMetadata } from "../seo.js";
 
-export const metadata = {
-  title: "소개 | 여백의 노트",
+export const metadata = createPageMetadata({
+  title: "소개",
   description: "요즘의 생각과 오래 생각해볼 만한 주제를 차분히 기록하는 여백의 노트입니다.",
-};
+  path: "/about",
+});
 
 export default function AboutPage() {
   return <>
