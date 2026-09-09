@@ -16,7 +16,7 @@
 - Spacing and layout rhythm: the 3-column desktop archive becomes a 2-column/tablet and 1-column/mobile layout without collapsing the timeline or filter controls.
 - Colors and tokens: paper, navy ink, muted green, fine gray rules, and the orange timeline marker are defined as reusable CSS variables.
 - Image quality and asset fidelity: intentionally image-free. The mock's decorative artwork and paper texture were not recreated so the interface remains implementable without generated decorative assets.
-- Copy and content: source categories, formats, and posts are represented as editable React data in one latest-first archive.
+- Copy and content: source categories, formats, and posts are represented as editable Next.js React data in one latest-first archive.
 
 ## Accessibility Changes
 

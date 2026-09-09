@@ -8,7 +8,7 @@
 
 ## Current stage and target structure
 
-- 현재는 루트 `src/**`의 공개 블로그 프로토타입 단계다.
+- 현재는 루트 `app/**`의 Next.js 공개 블로그 단계다.
 - 개발 순서는 `공개 블로그 → 로컬 관리자 → Supabase 백엔드`다. 앞 단계의 화면·콘텐츠 계약·디자인을 확정한 뒤 다음 단계로 진행한다.
 - 공개 블로그와 관리자를 만들기 시작하는 구조 전환 작업에서만 `apps/web`, `apps/admin`, `packages/content`, `packages/ui`로 이동한다.
 - 구조 전환 전에는 새로운 앱 루트나 패키지 경로를 임의로 만들지 않는다.
@@ -32,9 +32,9 @@
 | Role | Responsibility | Primary paths |
 | --- | --- | --- |
 | frontend-architect | 앱 구조, 빌드, 공개/관리자 경계 | root config, future `apps/**` |
-| frontend-dev | 공개·관리자 화면과 기능 | `src/**`, future `apps/**` |
-| design-system-dev | 토큰과 공용 UI | `src/styles.css`, future `packages/ui/**` |
-| data-layer-dev | Supabase, 검증 스키마, analytics | `src/lib/**`, future `packages/content/**` |
+| frontend-dev | 공개·관리자 화면과 기능 | `app/**`, future `apps/**` |
+| design-system-dev | 토큰과 공용 UI | `app/globals.css`, future `packages/ui/**` |
+| data-layer-dev | Supabase, 검증 스키마, analytics | `app/lib/**`, future `packages/content/**` |
 | harness-architect | Codex·PR·SEO/GEO 규칙과 검사기 | `AGENTS.md`, `.codex/**`, `.github/**`, `docs/*-conventions.md` |
 | code-reviewer | 명시 요청 시 읽기 전용 리뷰 | no write paths |
 
@@ -48,3 +48,13 @@
 - Commit and PR convention: `docs/pull-request-conventions.md`
 - SEO and GEO convention: `docs/seo-geo-conventions.md`
 - Branch and merge convention: `docs/pull-request-conventions.md`
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo, useState } from "react";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { track } from "./lib/analytics.js";
@@ -11,17 +13,13 @@ const posts = [
 const categories = ["전체", "경제", "기술", "생활", "관찰", "리뷰"];
 const formats = ["긴 글", "짧은 기록", "사용기", "링크 노트"];
 
-export function App() {
+export default function Home() {
   const [category, setCategory] = useState("전체");
   const [format, setFormat] = useState("전체");
   const [query, setQuery] = useState("");
   const visiblePosts = useMemo(() => {
     const keyword = query.trim().toLowerCase();
-    return posts.filter((post) =>
-      (category === "전체" || post.category === category) &&
-      (format === "전체" || post.format === format) &&
-      (!keyword || `${post.title} ${post.excerpt} ${post.tags.join(" ")}`.toLowerCase().includes(keyword)),
-    );
+    return posts.filter((post) => (category === "전체" || post.category === category) && (format === "전체" || post.format === format) && (!keyword || `${post.title} ${post.excerpt} ${post.tags.join(" ")}`.toLowerCase().includes(keyword)));
   }, [category, format, query]);
   const reset = () => { setCategory("전체"); setFormat("전체"); setQuery(""); };
   const selectCategory = (value) => { setCategory(value); track("filter_applied", { filter_type: "category", value }); };
