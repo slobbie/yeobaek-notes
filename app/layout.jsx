@@ -1,4 +1,5 @@
 import "./globals.css";
+import { AnalyticsReporter } from "./components/analytics-reporter.jsx";
 import { createPageMetadata, siteConfig } from "./seo.js";
 
 const homeTitle = "여백의 노트 — 생각을 기록하는 개인 아카이브";
@@ -32,5 +33,5 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  return <html lang="ko"><body>{children}</body></html>;
+  return <html lang="ko"><body><AnalyticsReporter />{children}</body></html>;
 }
