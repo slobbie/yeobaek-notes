@@ -4,7 +4,7 @@
 
 - Public web is read-only for visitors and may access only published content through the public Supabase client.
 - Local admin owns draft, publication, metadata, and analytics administration.
-- `src/lib/**` is the current data boundary. It owns Supabase clients, content schemas, analytics contracts, and future repository functions.
+- `app/lib/**` is the current data boundary. It owns Supabase clients, content schemas, analytics contracts, and future repository functions.
 - UI components receive data and callbacks. They do not initialize a database client or make network requests themselves.
 - 구현 순서는 공개 블로그, 로컬 전용 관리자, Supabase 백엔드다. 단계 전환 PR은 이전 단계의 화면·콘텐츠 계약을 깨지 않는지 함께 검증한다.
 
