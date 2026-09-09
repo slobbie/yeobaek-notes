@@ -21,7 +21,7 @@
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | W-01 | 병합됨 | Next.js App Router 공개 웹 기반으로 전환 | `build/public-next-foundation` | `build(blog): Next.js 공개 웹 기반을 구성한다` | Vite 의존성 없이 로컬 실행·production build가 되고, 공개 앱만 Vercel 배포 대상이다 | build, 기본 페이지 수동 확인 |
 | 2 | W-02 | 병합됨 | 콘텐츠 계약과 fixture 분리 | `feat/content-contract` | `feat(content): 공개 글 콘텐츠 계약을 정의한다` | 글의 slug·제목·요약·날짜·분야·형식·태그·출처·수정 정보가 한 계약으로 관리된다 | 계약 단위 테스트, 목록 렌더링 |
-| 3 | W-03 | 대기 | 최신순 아카이브 완성 | `feat/archive-experience` | `feat(blog): 최신순 글 모아보기를 완성한다` | 현재 디자인의 분야·형식·검색·빈 결과·모바일 레이아웃이 실제 Next 화면에서 동작한다 | 키보드·검색·필터·반응형 수동 확인 |
+| 3 | W-03 | PR 검토 | 최신순 아카이브 완성 | `feat/archive-experience` | `feat(blog): 최신순 글 모아보기를 완성한다` | 현재 디자인의 분야·형식·검색·빈 결과·모바일 레이아웃이 실제 Next 화면에서 동작한다 | 키보드·검색·필터·반응형 수동 확인 |
 | 4 | W-04 | 대기 | 글 상세 페이지와 출처 블록 | `feat/post-detail` | `feat(blog): 글 상세 페이지를 추가한다` | slug별 고유 페이지, 발행·수정일, 태그, 읽기 시간, 출처·기준 시점이 보인다 | 정적 경로·404·출처 표시 확인 |
 | 5 | W-05 | 대기 | 소개·편집 원칙 페이지 | `feat/editorial-pages` | `feat(blog): 소개와 편집 원칙 페이지를 추가한다` | 익명 브랜드의 주제 범위, 수정 원칙, 문의 경로를 공개하고 콘텐츠 책임 주체를 설명한다 | 링크·문서 구조·모바일 확인 |
 | 6 | W-06 | 대기 | SEO·GEO 공개 표면 | `feat/seo-geo-surface` | `feat(seo): 공개 글의 검색 메타데이터를 구성한다` | title, description, canonical, OG, `BlogPosting`, `WebSite`, sitemap, RSS, robots가 실제 공개 정보와 일치한다 | metadata 스냅샷, JSON-LD/Rich Results Test, sitemap 확인 |
