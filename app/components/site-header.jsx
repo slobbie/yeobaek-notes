@@ -1,7 +1,8 @@
 import Link from "next/link";
 
-export function SiteHeader({ home = false, onBrandClick }) {
-  const brandTitle = home
+export function SiteHeader({ current, home = false, onBrandClick }) {
+  const isHome = home || current === "home";
+  const brandTitle = isHome
     ? <h1 className="brand-title">여백의 노트</h1>
     : <span className="brand-title">여백의 노트</span>;
 
@@ -11,8 +12,8 @@ export function SiteHeader({ home = false, onBrandClick }) {
       <span>읽고, 쓰고, 생각한 것을 남깁니다.</span>
     </Link>
     <nav aria-label="주요 메뉴">
-      <Link className={home ? "active" : undefined} aria-current={home ? "page" : undefined} href="/#archive">글 모아보기</Link>
-      <Link href="/#about">소개</Link>
+      <Link className={isHome ? "active" : undefined} aria-current={isHome ? "page" : undefined} href="/#archive">글 모아보기</Link>
+      <Link className={current === "about" ? "active" : undefined} aria-current={current === "about" ? "page" : undefined} href="/about">소개</Link>
     </nav>
   </header>;
 }
