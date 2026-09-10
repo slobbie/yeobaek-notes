@@ -14,6 +14,7 @@
 | `post_opened` | 글 목록에서 제목을 눌렀을 때 | `post_slug`, `category` | 목록에서 글로 이동한 비율 |
 | `search_used` | 검색을 마치고 입력창을 벗어날 때 | `query_length`, `results_count` | 검색 사용 수, 결과가 있는 검색 비율 |
 | `filter_applied` | 주제를 선택할 때 | `value` | 주제별 탐색 사용 수 |
+| `archive_expanded` | `글 더 보기`를 눌렀을 때 | `visible_count`, `total_count` | 목록을 더 펼쳐 본 횟수와 도달한 글 수 |
 | `source_opened` | 글의 외부 출처를 열 때 | `post_slug`, `source_host` | 글 조회 대비 출처 확인 비율 |
 
 사용자 수나 전환율로 표현하지 않는다. 식별자와 세션이 없으므로 현재 계산값은 이벤트 횟수를 기준으로 한 탐색 비율이다.
