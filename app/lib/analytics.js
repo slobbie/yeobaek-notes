@@ -5,6 +5,7 @@ const EVENT_SCHEMAS = Object.freeze({
   post_opened: Object.freeze({ post_slug: "slug", category: "label" }),
   search_used: Object.freeze({ query_length: "count", results_count: "count" }),
   filter_applied: Object.freeze({ value: "label" }),
+  archive_expanded: Object.freeze({ visible_count: "count", total_count: "count" }),
   source_opened: Object.freeze({ post_slug: "slug", source_host: "hostname" }),
 });
 
@@ -61,6 +62,9 @@ export function createAnalyticsEvent(name, properties, context) {
   if (missingKey) throw new TypeError(`필수 분석 속성이 없습니다: ${missingKey}`);
 
   expectedKeys.forEach((key) => assertProperty(key, properties[key], schema[key]));
+  if (name === "archive_expanded" && properties.visible_count > properties.total_count) {
+    throw new TypeError("visible_count는 total_count보다 클 수 없습니다.");
+  }
 
   const occurredAt = new Date(context.occurred_at);
   if (Number.isNaN(occurredAt.getTime())) throw new TypeError("occurred_at은 유효한 날짜여야 합니다.");

@@ -26,6 +26,15 @@ test("검색 이벤트는 검색어 대신 길이와 결과 수만 허용한다"
   );
 });
 
+test("글 더 보기는 표시한 글 수와 전체 글 수만 기록한다", () => {
+  const event = createAnalyticsEvent("archive_expanded", { visible_count: 4, total_count: 4 }, context);
+  assert.deepEqual(event.properties, { visible_count: 4, total_count: 4 });
+  assert.throws(
+    () => createAnalyticsEvent("archive_expanded", { visible_count: 5, total_count: 4 }, context),
+    /total_count보다 클 수 없습니다/,
+  );
+});
+
 test("정의되지 않은 이벤트와 속성값은 거부한다", () => {
   assert.throws(() => createAnalyticsEvent("user_identified", {}, context), /정의되지 않은 분석 이벤트/);
   assert.throws(

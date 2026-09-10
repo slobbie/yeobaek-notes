@@ -65,6 +65,25 @@
   color: #6e7876;
 }
 
+.loadMore {
+  padding: 4px 0 34px;
+  text-align: center;
+}
+
+.loadMore button {
+  min-width: 160px;
+  padding: 11px 24px;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+}
+
+.loadMore button:hover {
+  border-color: var(--leaf);
+  color: var(--leaf);
+}
+
 @media (max-width: 980px) {
   .controls {
     flex-wrap: wrap;
@@ -88,5 +107,9 @@
     max-width: 100%;
     gap: 15px;
     overflow-x: auto;
+  }
+
+  .loadMore button {
+    width: 100%;
   }
 }
