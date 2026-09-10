@@ -1,15 +1,28 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { checkPostForPublication } from "@yeobaek/content";
 import { MarkdownBody } from "@yeobaek/ui";
 import { splitEditorTags } from "./post-editor-model.js";
 
 const EMPTY_SOURCE = { title: "", publisher: "", url: "", accessedAt: "" };
 
-export function PostEditor({ categories, initialDraft }) {
+export function PostEditor({ categories, existingSlugs, initialDraft, originalSlug, today }) {
   const [draft, setDraft] = useState(initialDraft);
   const tags = useMemo(() => splitEditorTags(draft.tags), [draft.tags]);
-  const visibleSources = draft.sources.filter((source) => source.title || source.publisher || source.url);
+  const publicationCheck = useMemo(
+    () => checkPostForPublication(draft, { existingSlugs, originalSlug, today }),
+    [draft, existingSlugs, originalSlug, today],
+  );
+  const invalidFieldIds = useMemo(
+    () => new Set(publicationCheck.checks
+      .filter(({ fieldId, status }) => fieldId && status === "error")
+      .map(({ fieldId }) => fieldId)),
+    [publicationCheck],
+  );
+  const visibleSources = draft.sources.filter(
+    (source) => source.title || source.publisher || source.url || source.accessedAt,
+  );
 
   const updateDraft = (field) => (event) => {
     setDraft((current) => ({ ...current, [field]: event.target.value }));
@@ -46,26 +59,26 @@ export function PostEditor({ categories, initialDraft }) {
         <form className="post-form" onSubmit={(event) => event.preventDefault()}>
           <fieldset>
             <legend>기본 정보</legend>
-            <div className="field field-wide"><label htmlFor="post-title">제목</label><input id="post-title" value={draft.title} onChange={updateDraft("title")} /></div>
+            <div className="field field-wide"><label htmlFor="post-title">제목</label><input aria-invalid={invalidFieldIds.has("post-title")} id="post-title" value={draft.title} onChange={updateDraft("title")} /></div>
             <div className="field field-wide">
               <label htmlFor="post-slug">글 주소</label>
-              <div className="slug-input"><span aria-hidden="true">/posts/</span><input id="post-slug" value={draft.slug} onChange={updateDraft("slug")} spellCheck="false" /></div>
+              <div className="slug-input"><span aria-hidden="true">/posts/</span><input aria-invalid={invalidFieldIds.has("post-slug")} id="post-slug" value={draft.slug} onChange={updateDraft("slug")} spellCheck="false" /></div>
             </div>
-            <div className="field field-wide"><label htmlFor="post-excerpt">요약</label><textarea id="post-excerpt" rows="3" value={draft.excerpt} onChange={updateDraft("excerpt")} /></div>
+            <div className="field field-wide"><label htmlFor="post-excerpt">요약</label><textarea aria-invalid={invalidFieldIds.has("post-excerpt")} id="post-excerpt" rows="3" value={draft.excerpt} onChange={updateDraft("excerpt")} /></div>
           </fieldset>
 
           <fieldset>
             <legend>본문</legend>
             <div className="field field-wide">
               <label htmlFor="post-body">Markdown</label>
-              <textarea className="body-input" id="post-body" rows="15" value={draft.bodyMarkdown} onChange={updateDraft("bodyMarkdown")} />
+              <textarea aria-invalid={invalidFieldIds.has("post-body")} className="body-input" id="post-body" rows="15" value={draft.bodyMarkdown} onChange={updateDraft("bodyMarkdown")} />
               <p className="field-help"><code>##</code> 소제목 · <code>**</code> 강조 · <code>&gt;</code> 인용 · <code>-</code> 목록 · <code>[이름](주소)</code> 링크</p>
             </div>
           </fieldset>
 
           <fieldset>
             <legend>분류</legend>
-            <div className="field"><label htmlFor="post-category">분야</label><select id="post-category" value={draft.category} onChange={updateDraft("category")}>{categories.map((category) => <option key={category}>{category}</option>)}</select></div>
+            <div className="field"><label htmlFor="post-category">분야</label><select aria-invalid={invalidFieldIds.has("post-category")} id="post-category" value={draft.category} onChange={updateDraft("category")}>{categories.map((category) => <option key={category}>{category}</option>)}</select></div>
             <div className="field"><label htmlFor="post-tags">태그</label><input id="post-tags" value={draft.tags} onChange={updateDraft("tags")} placeholder="쉼표로 구분" /></div>
           </fieldset>
 
@@ -75,10 +88,10 @@ export function PostEditor({ categories, initialDraft }) {
             {draft.sources.length === 0 && <p className="section-empty">출처가 없는 글입니다.</p>}
             {draft.sources.map((source, index) => <div className="source-fields" key={index}>
               <div className="source-heading"><strong>출처 {index + 1}</strong><button type="button" onClick={() => removeSource(index)}>삭제</button></div>
-              <div className="field"><label htmlFor={`source-title-${index}`}>자료 제목</label><input id={`source-title-${index}`} value={source.title} onChange={updateSource(index, "title")} /></div>
-              <div className="field"><label htmlFor={`source-publisher-${index}`}>발행처</label><input id={`source-publisher-${index}`} value={source.publisher} onChange={updateSource(index, "publisher")} /></div>
-              <div className="field field-wide"><label htmlFor={`source-url-${index}`}>웹 주소</label><input id={`source-url-${index}`} type="url" value={source.url} onChange={updateSource(index, "url")} /></div>
-              <div className="field"><label htmlFor={`source-date-${index}`}>확인 날짜</label><input id={`source-date-${index}`} type="date" value={source.accessedAt} onChange={updateSource(index, "accessedAt")} /></div>
+              <div className="field"><label htmlFor={`source-title-${index}`}>자료 제목</label><input aria-invalid={invalidFieldIds.has(`source-title-${index}`)} id={`source-title-${index}`} value={source.title} onChange={updateSource(index, "title")} /></div>
+              <div className="field"><label htmlFor={`source-publisher-${index}`}>발행처</label><input aria-invalid={invalidFieldIds.has(`source-publisher-${index}`)} id={`source-publisher-${index}`} value={source.publisher} onChange={updateSource(index, "publisher")} /></div>
+              <div className="field field-wide"><label htmlFor={`source-url-${index}`}>웹 주소</label><input aria-invalid={invalidFieldIds.has(`source-url-${index}`)} id={`source-url-${index}`} type="url" value={source.url} onChange={updateSource(index, "url")} /></div>
+              <div className="field"><label htmlFor={`source-date-${index}`}>확인 날짜</label><input aria-invalid={invalidFieldIds.has(`source-date-${index}`)} id={`source-date-${index}`} type="date" max={today} value={source.accessedAt} onChange={updateSource(index, "accessedAt")} /></div>
             </div>)}
           </fieldset>
 
@@ -86,17 +99,42 @@ export function PostEditor({ categories, initialDraft }) {
             <legend>검색 정보</legend>
             <div className="field field-wide">
               <div className="label-row"><label htmlFor="seo-title">검색 제목</label><span>{draft.seoTitle.length}자</span></div>
-              <input id="seo-title" value={draft.seoTitle} onChange={updateDraft("seoTitle")} />
+              <input aria-invalid={invalidFieldIds.has("seo-title")} id="seo-title" value={draft.seoTitle} onChange={updateDraft("seoTitle")} />
             </div>
             <div className="field field-wide">
               <div className="label-row"><label htmlFor="seo-description">검색 설명</label><span>{draft.seoDescription.length}자</span></div>
-              <textarea id="seo-description" rows="3" value={draft.seoDescription} onChange={updateDraft("seoDescription")} />
+              <textarea aria-invalid={invalidFieldIds.has("seo-description")} id="seo-description" rows="3" value={draft.seoDescription} onChange={updateDraft("seoDescription")} />
             </div>
           </fieldset>
         </form>
       </section>
 
       <aside className="preview-panel" aria-labelledby="preview-title">
+        <section className="content-check" aria-labelledby="content-check-title">
+          <div className="content-check-heading">
+            <div>
+              <p>발행 전 확인</p>
+              <h2 id="content-check-title">
+                {publicationCheck.ready ? "발행할 수 있습니다" : `수정할 항목 ${publicationCheck.errorCount}개`}
+              </h2>
+            </div>
+            {publicationCheck.warningCount > 0 && <span>확인 권장 {publicationCheck.warningCount}</span>}
+          </div>
+          <p className="content-check-summary" aria-live="polite">
+            {publicationCheck.ready
+              ? publicationCheck.warningCount > 0
+                ? "발행은 가능하지만 아래 내용을 한 번 더 확인해 주세요."
+                : "필수 항목을 모두 확인했습니다."
+              : "오류를 수정하면 발행할 수 있습니다."}
+          </p>
+          <ul className="check-list">
+            {publicationCheck.checks.map((check) => <li className={`check-item check-${check.status}`} key={check.id}>
+              <span className="check-mark" aria-hidden="true">{check.status === "passed" ? "✓" : "!"}</span>
+              <div><strong>{check.label}</strong><p>{check.message}</p></div>
+              {check.fieldId && check.status !== "passed" && <a href={`#${check.fieldId}`}>확인</a>}
+            </li>)}
+          </ul>
+        </section>
         <div className="preview-sticky">
           <div className="preview-bar"><h2 id="preview-title">미리보기</h2><span>공개 글</span></div>
           <article className="post-preview">
