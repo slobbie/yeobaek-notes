@@ -28,7 +28,7 @@
 | 7 | W-07 | 병합됨 | 비식별 분석 이벤트 기반 | `feat/analytics-foundation` | `feat(analytics): 공개 블로그 행동 지표 기반을 추가한다` | 조회·검색·주제·출처 이벤트 계약이 개인정보 없이 동작한다. |
 | 8 | W-08 | 병합됨 | `develop` PR 품질 게이트 | `ci/public-quality-gate` | `ci(blog): 공개 배포 품질 게이트를 추가한다` | 커밋·공백·테스트·빌드·공개 경계 검사가 필수로 실행된다. |
 | 9 | W-09 | 병합됨 | 공개 글 읽기 화면 단순화 | `fix/simplify-reading-ui` | `fix(blog): 공개 글 읽기 화면을 단순화한다` | 형식·읽는 시간·작성 기준을 노출하지 않고 주제·검색 중심으로 읽힌다. |
-| 10 | W-10 | 대기 | 공개 콘텐츠 데이터 계약 단순화 | `refactor/content-public-contract` | `refactor(content): 공개 글 데이터 계약을 단순화한다` | `format`, `readingTimeMinutes`, `basis`와 형식 필터 계약을 제거하고 테스트를 갱신한다. |
+| 10 | W-10 | 병합됨 | 공개 콘텐츠 데이터 계약 단순화 | `refactor/content-public-contract` | `refactor(content): 공개 글 데이터 계약을 단순화한다` | `format`, `readingTimeMinutes`, `basis`와 형식 필터 계약을 제거하고 테스트를 갱신한다. |
 | 11 | W-11 | 대기 | 검색 상태와 목록 확장 방식 확정 | `feat/archive-navigation` | `feat(blog): 글 탐색 상태와 목록 확장을 구성한다` | 검색·주제 상태가 이동 후 유지되고 글 증가 시 목록을 나눠 볼 수 있다. |
 
 ## 2. 로컬 전용 관리자
@@ -58,4 +58,4 @@
 
 ## 지금 할 일
 
-다음 작업은 `W-10`이다. 공개 화면에서 제거한 `format`, `readingTimeMinutes`, `basis`와 형식 필터 계약을 데이터 모델·fixture·분석 이벤트·테스트에서 제거한다.
+다음 작업은 `W-11`이다. 검색어와 선택한 주제가 화면 이동 뒤에도 유지되게 하고, 글이 늘어날 때 목록을 나눠 볼 방식을 확정한다.

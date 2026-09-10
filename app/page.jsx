@@ -22,7 +22,7 @@ export default function Home() {
   const visiblePosts = useMemo(() => filterPosts(posts, { category, query }), [category, query]);
   const archivePeriod = getArchivePeriod(visiblePosts.length > 0 ? visiblePosts : posts);
   const reset = () => { setCategory("전체"); setQuery(""); lastTrackedQuery.current = null; };
-  const selectCategory = (value) => { setCategory(value); track("filter_applied", { filter_type: "category", value }); };
+  const selectCategory = (value) => { setCategory(value); track("filter_applied", { value }); };
   const trackSearch = () => {
     const normalizedQuery = query.trim();
     if (!normalizedQuery || normalizedQuery === lastTrackedQuery.current) return;

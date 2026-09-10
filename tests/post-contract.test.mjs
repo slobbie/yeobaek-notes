@@ -8,11 +8,8 @@ const validPost = {
   publishedAt: "2026-09-01T09:00:00+09:00",
   updatedAt: "2026-09-02T09:00:00+09:00",
   category: "생활",
-  format: "짧은 기록",
   title: "예시 글",
   excerpt: "공개 글 계약을 검증하기 위한 예시입니다.",
-  basis: "2026년 9월 테스트 기준",
-  readingTimeMinutes: 2,
   tags: ["기록"],
   sources: [],
   body: [{ type: "paragraph", text: "검증할 본문입니다." }],
@@ -24,6 +21,19 @@ test("공개 글의 필수 정보와 날짜 순서를 검증한다", () => {
   assert.equal(post.slug, "example-post");
   assert.throws(() => definePost({ ...validPost, slug: "잘못된 주소" }), /slug/);
   assert.throws(() => definePost({ ...validPost, updatedAt: "2026-08-31T09:00:00+09:00" }), /updatedAt/);
+});
+
+test("공개 글 계약은 글을 찾고 읽는 데 필요한 정보만 반환한다", () => {
+  const post = definePost({
+    ...validPost,
+    format: "짧은 기록",
+    basis: "예전 작성 기준",
+    readingTimeMinutes: 2,
+  });
+
+  assert.equal("format" in post, false);
+  assert.equal("basis" in post, false);
+  assert.equal("readingTimeMinutes" in post, false);
 });
 
 test("발행 글만 최신순으로 반환한다", () => {

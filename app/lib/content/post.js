@@ -1,5 +1,4 @@
 export const POST_CATEGORIES = Object.freeze(["경제", "기술", "생활", "관찰", "리뷰"]);
-export const POST_FORMATS = Object.freeze(["긴 글", "짧은 기록", "사용기", "링크 노트"]);
 export const POST_STATUSES = Object.freeze(["draft", "published"]);
 export const POST_BLOCK_TYPES = Object.freeze(["heading", "paragraph", "quote", "list"]);
 
@@ -62,10 +61,6 @@ export function definePost(input) {
     throw new TypeError("updatedAt은 publishedAt보다 빠를 수 없습니다.");
   }
 
-  if (!Number.isInteger(input.readingTimeMinutes) || input.readingTimeMinutes < 1) {
-    throw new TypeError("readingTimeMinutes는 1 이상의 정수여야 합니다.");
-  }
-
   const tags = Array.isArray(input.tags) ? [...new Set(input.tags.map((tag) => requireText(tag, "tag")))] : null;
   if (!tags) throw new TypeError("tags는 문자열 배열이어야 합니다.");
   const sources = Array.isArray(input.sources) ? input.sources.map(defineSource) : null;
@@ -78,12 +73,9 @@ export function definePost(input) {
     status: requireEnum(input.status, POST_STATUSES, "status"),
     title: requireText(input.title, "title"),
     excerpt: requireText(input.excerpt, "excerpt"),
-    basis: requireText(input.basis, "basis"),
     category: requireEnum(input.category, POST_CATEGORIES, "category"),
-    format: requireEnum(input.format, POST_FORMATS, "format"),
     publishedAt,
     updatedAt,
-    readingTimeMinutes: input.readingTimeMinutes,
     tags: Object.freeze(tags),
     sources: Object.freeze(sources),
     body: Object.freeze(body),
@@ -114,8 +106,4 @@ export function formatPostDate(value) {
   const values = Object.fromEntries(parts.map(({ type, value: part }) => [type, part]));
   const { year, month, day } = values;
   return `${year}. ${month}. ${day}`;
-}
-
-export function formatReadingTime(minutes) {
-  return `${minutes}분 읽기`;
 }
