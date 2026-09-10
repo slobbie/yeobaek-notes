@@ -6,11 +6,11 @@
 - Local admin owns draft, publication, metadata, and analytics administration.
 - `app/lib/**` is the current data boundary. It owns Supabase clients, content schemas, analytics contracts, and future repository functions.
 - UI components receive data and callbacks. They do not initialize a database client or make network requests themselves.
-- 구현 순서는 공개 블로그, 로컬 전용 관리자, Supabase 백엔드다. 단계 전환 PR은 이전 단계의 화면·콘텐츠 계약을 깨지 않는지 함께 검증한다.
+- 구현 순서는 공개 블로그, 로컬 전용 관리자, Supabase 백엔드, 통합 검증, 공개 배포다. 단계 전환 PR은 이전 단계의 화면·콘텐츠 계약을 깨지 않는지 함께 검증한다.
 
 ## Content and analytics
 
-- A post has a stable `slug`, one `category`, one `format`, zero or more `tags`, publication state, and SEO metadata.
+- A post has a stable `slug`, one `category`, zero or more `tags`, publication state, body, sources, and SEO metadata.
 - Event names use `lower_snake_case`. Required fields are `name`, `occurred_at`, and `page_path`.
 - Do not send names, email addresses, raw IP addresses, authentication tokens, or free-text post bodies as analytics properties.
 - When the database is introduced, document each event property before it is persisted.
@@ -18,8 +18,8 @@
 ## SEO와 GEO
 
 - GEO는 별도 해킹 대상이 아니다. 검색 엔진과 AI가 인용·요약할 수 있도록 독자 우선의 원문, 명확한 맥락, 검증 가능한 출처, 일관된 메타데이터를 제공하는 작업이다.
-- 모든 공개 글은 제목, 요약, 고정 URL, 발행일, 수정일, 분야, 형식, 태그와 함께 관리한다. 경제·시사·리뷰 글은 주장에 연결되는 출처와 기준 시점을 글 본문에서 확인할 수 있어야 한다.
-- 브랜드 표기는 `여백의 노트`로 통일한다. 개인 신원을 공개하지 않아도 되지만, 소개 페이지와 편집 원칙에서 콘텐츠의 책임 주체·수정 원칙·문의 방법을 명확히 한다.
+- 모든 공개 글은 제목, 요약, 고정 URL, 발행일, 수정일, 분야, 태그와 함께 관리한다. 경제·시사·리뷰 글은 주장에 연결되는 출처와 기준 시점을 글 본문에서 자연스럽게 확인할 수 있어야 한다.
+- 브랜드 표기는 `여백의 노트`로 통일하고 개인 신원 공개를 요구하지 않는다. 소개 페이지에는 사용자가 확정한 브랜드 문장만 제공한다.
 - 실제 화면에 보이는 정보와 일치할 때만 `Article` 또는 `BlogPosting` JSON-LD, canonical, Open Graph, 사이트맵, RSS를 제공한다. 공개 Next.js 앱 전환 시 서버 렌더링 또는 정적 생성을 기본값으로 한다.
 - 제품 리뷰에는 검토 대상 모델, 사용·비교 기준, 확인 날짜와 출처를 남긴다. 경제 콘텐츠에는 자료의 기준 시점과 정보 제공 목적을 명확히 하며 개인 맞춤 투자 조언처럼 표현하지 않는다.
 - AI 노출만을 위한 숨은 텍스트, 같은 내용의 대량 변형, 근거 없는 FAQ, 의미 없는 문단 분할, 근거 없는 `llms.txt` 생성은 금지한다.
