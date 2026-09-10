@@ -37,7 +37,7 @@
 ## Git and hooks
 
 - Husky runs a fast staged-file whitespace check. Commitlint enforces Conventional Commits.
-- 커밋 형식은 `type(scope): subject`다. type과 scope는 영문 식별자, subject는 한국어 명령형으로 작성한다. 한 커밋에는 되돌릴 수 있는 하나의 목적만 담는다.
+- 커밋 형식은 `type(scope): subject`다. type과 scope는 영문 식별자, subject는 한국어 명령형으로 작성한다. 한 커밋에는 되돌릴 수 있는 하나의 목적만 담고, 모든 커밋 본문에 변경 이유·변경 내용·검증 결과를 기록한다.
 - 허용 type은 `feat`, `fix`, `refactor`, `perf`, `test`, `docs`, `chore`, `ci`, `build`다.
 - 허용 scope는 `blog`, `admin`, `content`, `seo`, `analytics`, `ui`, `db`, `repo`다.
 - build, integration, deployment 검증은 pre-commit 훅에 넣지 않는다. 실행했다면 PR의 검증 근거에 기록한다.
@@ -46,9 +46,11 @@
 - PR 병합을 확인한 뒤 해당 작업 브랜치를 로컬과 원격에서 삭제한다. 병합되지 않은 브랜치는 삭제하지 않는다.
 - `main`은 배포 가능한 통합 결과만 받는다. 현재 공개 배포 전까지 `develop`에서 직접 `main`으로 병합하지 않는다.
 
-## 풀 리퀘스트
+## 커밋과 풀 리퀘스트
 
-- PR은 변경의 기준 문서다. `.github/pull_request_template.md`의 섹션을 삭제하지 않는다.
+- 커밋 메시지는 작업 단위, PR은 전체 변경 단위의 신뢰할 수 있는 의사결정 문서다. 상세 기준은 `docs/pull-request-conventions.md`를 따른다.
+- 커밋과 PR의 이유·범위·검증 내용이 다르면 병합하지 않고 두 기록을 먼저 정정한다.
+- PR은 `.github/pull_request_template.md`의 섹션을 삭제하지 않는다.
 - PR 제목은 커밋과 같은 Conventional Commit 형식을 따른다.
 - PR의 모든 주장은 확인 가능한 코드, 실행한 명령의 결과, 스크린샷·수동 관찰 또는 연결된 결정 기록 중 하나를 근거로 남긴다. 모르는 항목은 `확인 필요`로 표기하며, 실행하지 않은 검증을 통과한 것처럼 쓰지 않는다.
 - 하나의 PR에는 하나의 제품 목적만 둔다. 관련 없는 후속 작업은 조용히 포함하지 말고 `포함하지 않은 범위`에 적는다.
