@@ -4,7 +4,7 @@ const EVENT_SCHEMAS = Object.freeze({
   page_viewed: Object.freeze({}),
   post_opened: Object.freeze({ post_slug: "slug", category: "label" }),
   search_used: Object.freeze({ query_length: "count", results_count: "count" }),
-  filter_applied: Object.freeze({ filter_type: ["category", "format"], value: "label" }),
+  filter_applied: Object.freeze({ value: "label" }),
   source_opened: Object.freeze({ post_slug: "slug", source_host: "hostname" }),
 });
 

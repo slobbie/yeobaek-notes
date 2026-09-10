@@ -2,14 +2,13 @@ function normalizeSearch(value) {
   return value.trim().toLocaleLowerCase("ko-KR");
 }
 
-export function filterPosts(posts, { category = "전체", format = "전체", query = "" } = {}) {
+export function filterPosts(posts, { category = "전체", query = "" } = {}) {
   const keyword = normalizeSearch(query);
 
   return posts.filter((post) => {
     const matchesCategory = category === "전체" || post.category === category;
-    const matchesFormat = format === "전체" || post.format === format;
     const searchableText = normalizeSearch(`${post.title} ${post.excerpt} ${post.tags.join(" ")}`);
-    return matchesCategory && matchesFormat && (!keyword || searchableText.includes(keyword));
+    return matchesCategory && (!keyword || searchableText.includes(keyword));
   });
 }
 

@@ -29,8 +29,8 @@ test("검색 이벤트는 검색어 대신 길이와 결과 수만 허용한다"
 test("정의되지 않은 이벤트와 속성값은 거부한다", () => {
   assert.throws(() => createAnalyticsEvent("user_identified", {}, context), /정의되지 않은 분석 이벤트/);
   assert.throws(
-    () => createAnalyticsEvent("filter_applied", { filter_type: "unknown", value: "경제" }, context),
-    /허용되지 않은 값/,
+    () => createAnalyticsEvent("filter_applied", { filter_type: "category", value: "경제" }, context),
+    /허용되지 않은 분석 속성/,
   );
 });
 
@@ -62,7 +62,7 @@ test("브라우저에서는 계약을 통과한 이벤트를 관찰자에게 전
   try {
     let observedEvent;
     const stopObserving = observeAnalytics((event) => { observedEvent = event; });
-    const trackedEvent = track("filter_applied", { filter_type: "category", value: "경제" });
+    const trackedEvent = track("filter_applied", { value: "경제" });
 
     assert.deepEqual(observedEvent, trackedEvent);
     stopObserving();
