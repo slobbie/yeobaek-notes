@@ -4,7 +4,7 @@ body { min-width: 320px; margin: 0; background: var(--paper); color: var(--ink);
 button, input, select, textarea { font: inherit; }
 button, select { cursor: pointer; }
 button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--dot); outline-offset: 3px; }
-.admin-app { min-height: 100svh; }
+.admin-app { --admin-error: #8c4d34; --admin-preview: #eeeee8; min-height: 100svh; }
 .admin-header { position: sticky; z-index: 10; top: 0; min-height: 72px; padding: 0 clamp(24px, 3.5vw, 56px); border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--paper) 94%, transparent); backdrop-filter: blur(14px); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .admin-brand { display: flex; align-items: baseline; gap: 12px; }
 .admin-brand strong { font: 700 20px/1 Georgia, "Times New Roman", serif; letter-spacing: -.7px; }
@@ -41,8 +41,24 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .source-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; padding: 24px; border: 1px solid var(--line); background: color-mix(in srgb, #fff 46%, transparent); }
 .source-heading { grid-column: 1 / -1; }
 .source-heading strong { margin: 0; }
-.source-heading button { color: #8c4d34; }
-.preview-panel { min-width: 0; padding: clamp(36px, 4.5vw, 72px) clamp(28px, 5vw, 82px) 96px; background: #eeeee8; }
+.source-heading button { color: var(--admin-error); }
+.field input[aria-invalid="true"], .field select[aria-invalid="true"], .field textarea[aria-invalid="true"], .slug-input:has(input[aria-invalid="true"]) { border-color: var(--admin-error); }
+.preview-panel { min-width: 0; padding: clamp(36px, 4.5vw, 72px) clamp(28px, 5vw, 82px) 96px; background: var(--admin-preview); }
+.content-check { max-width: 780px; margin: 0 auto 54px; padding: 0 0 42px; border-bottom: 1px solid #a8ada5; }
+.content-check-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+.content-check-heading p { margin: 0 0 8px; color: var(--leaf); font-size: 13px; font-weight: 700; }
+.content-check-heading h2 { margin: 0; font: 700 clamp(25px, 2.4vw, 34px)/1.25 Georgia, "Times New Roman", serif; letter-spacing: -1.1px; }
+.content-check-heading > span { flex: 0 0 auto; padding-bottom: 4px; color: var(--admin-error); font-size: 12px; font-weight: 700; }
+.content-check-summary { margin: 13px 0 24px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+.check-list { margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
+.check-item { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; gap: 11px; align-items: start; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.check-mark { display: grid; width: 19px; height: 19px; border: 1px solid currentColor; border-radius: 50%; place-items: center; color: var(--muted); font-size: 11px; font-weight: 700; line-height: 1; }
+.check-item strong { display: block; margin-bottom: 4px; color: var(--ink); font-size: 14px; }
+.check-item p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.check-item a { margin-top: 1px; color: var(--leaf); font-size: 12px; font-weight: 700; text-underline-offset: 3px; }
+.check-error .check-mark { color: var(--admin-error); }
+.check-warning .check-mark { color: var(--dot); }
+.check-passed .check-mark { color: var(--leaf); }
 .preview-sticky { position: sticky; top: 108px; max-width: 780px; margin: 0 auto; }
 .preview-bar { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 14px; border-bottom: 1px solid #a8ada5; }
 .preview-bar h2 { margin: 0; font-size: 14px; }
@@ -85,6 +101,11 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   .post-form fieldset, .source-fields { grid-template-columns: minmax(0, 1fr); }
   .section-action { margin-top: -46px; }
   .source-fields { padding: 20px 16px; }
+  .content-check { margin-bottom: 42px; padding-bottom: 34px; }
+  .content-check-heading { align-items: flex-start; }
+  .content-check-heading h2 { font-size: 26px; }
+  .check-item { grid-template-columns: 21px minmax(0, 1fr); }
+  .check-item a { grid-column: 2; }
   .post-preview h1 { font-size: 37px; letter-spacing: -1.8px; }
   .preview-excerpt { font-size: 17px; }
 }
