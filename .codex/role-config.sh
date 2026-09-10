@@ -2,7 +2,7 @@
 
 role_hint() {
   case "$1" in
-    AGENTS.md|.codex/*|.github/*|docs/*-conventions.md) printf '%s' harness-architect ;;
+    AGENTS.md|.codex/*|.github/*|docs/*-conventions.md|docs/implementation-plan.md) printf '%s' harness-architect ;;
     app/lib/*) printf '%s' data-layer-dev ;;
     apps/*/src/lib/*|packages/content/*) printf '%s' data-layer-dev ;;
     app/globals.css|app/components/ui/*) printf '%s' design-system-dev ;;
