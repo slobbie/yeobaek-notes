@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { findPublishedPostBySlug, formatPostDate, getPublishedPosts, postFixtures } from "@yeobaek/content";
-import { SiteFooter, SiteHeader } from "@yeobaek/ui";
+import { MarkdownBody, SiteFooter, SiteHeader } from "@yeobaek/ui";
 import { TrackedSourceLink } from "../../components/tracked-source-link.jsx";
 import { createBlogPostingJsonLd, createPageMetadata, serializeJsonLd } from "../../seo.js";
 
@@ -26,17 +26,6 @@ export async function generateMetadata({ params }) {
     category: post.category,
     tags: post.tags,
   });
-}
-
-function PostBody({ blocks }) {
-  return <div className="article-body">
-    {blocks.map((block, index) => {
-      if (block.type === "heading") return <h2 key={index}>{block.text}</h2>;
-      if (block.type === "quote") return <blockquote key={index}>{block.text}</blockquote>;
-      if (block.type === "list") return <ul key={index}>{block.items.map((item) => <li key={item}>{item}</li>)}</ul>;
-      return <p key={index}>{block.text}</p>;
-    })}
-  </div>;
 }
 
 function Sources({ sources, postSlug }) {
@@ -67,7 +56,7 @@ export default async function PostPage({ params }) {
           <p className="article-lead">{post.excerpt}</p>
           <p className="article-tags">{post.tags.map((tag) => `#${tag}`).join(" · ")}</p>
         </header>
-        <PostBody blocks={post.body} />
+        <MarkdownBody className="article-body markdown-body">{post.bodyMarkdown}</MarkdownBody>
         <Sources sources={post.sources} postSlug={post.slug} />
       </article>
       <SiteFooter />
