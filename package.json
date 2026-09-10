@@ -3,20 +3,21 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "test": "node --test tests/*.test.mjs",
+    "dev": "npm run dev:web",
+    "dev:web": "npm run dev --workspace @yeobaek/web",
+    "dev:admin": "npm run dev --workspace @yeobaek/admin",
+    "build": "npm run build:web",
+    "build:web": "npm run build --workspace @yeobaek/web",
+    "start": "npm run start --workspace @yeobaek/web",
+    "test": "node --test packages/content/tests/*.test.mjs apps/web/tests/*.test.mjs tests/*.test.mjs",
     "check:staged": "git diff --check --cached",
     "commitlint": "commitlint --edit",
     "prepare": "husky"
-  },
-  "dependencies": {
-    "@phosphor-icons/react": "^2.1.10",
-    "next": "^16.3.4",
-    "react": "19.2.0",
-    "react-dom": "19.2.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.2",

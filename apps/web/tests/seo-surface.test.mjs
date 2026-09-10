@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { definePost } from "../app/lib/content/post.js";
-import { postFixtures } from "../app/lib/content/posts.js";
+import { definePost, postFixtures } from "@yeobaek/content";
 import {
   absoluteUrl,
   createBlogPostingJsonLd,

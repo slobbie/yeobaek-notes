@@ -1,4 +1,4 @@
-import { getPublishedPosts } from "./lib/content/post.js";
+import { getPublishedPosts } from "@yeobaek/content";
 
 const LOCAL_SITE_URL = "http://localhost:3000";
 

@@ -1,5 +1,4 @@
-import { SiteFooter } from "../components/site-footer.jsx";
-import { SiteHeader } from "../components/site-header.jsx";
+import { SiteFooter, SiteHeader } from "@yeobaek/ui";
 import { createPageMetadata } from "../seo.js";
 
 export const metadata = createPageMetadata({

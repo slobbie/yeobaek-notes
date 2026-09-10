@@ -1,4 +1,4 @@
-import { postFixtures } from "../lib/content/posts.js";
+import { postFixtures } from "@yeobaek/content";
 import { createRssFeed } from "../seo.js";
 
 export const dynamic = "force-static";
