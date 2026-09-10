@@ -1,0 +1,58 @@
+name: develop PR 기본 품질 검사
+
+on:
+  pull_request:
+    branches:
+      - develop
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
+permissions:
+  contents: read
+
+concurrency:
+  group: develop-pr-quality-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  public-quality:
+    name: 커밋·테스트·공개 빌드
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      CI: true
+      NEXT_PUBLIC_SITE_URL: https://yeobaek-notes.example
+
+    steps:
+      - name: 저장소 확인
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Node.js 설정
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22.23.0
+          cache: npm
+
+      - name: 의존성 설치
+        run: npm ci
+
+      - name: 커밋 메시지 검사
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: npx --no-install commitlint --from "$BASE_SHA" --to "$HEAD_SHA"
+
+      - name: 변경 공백 검사
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: git diff --check "$BASE_SHA...$HEAD_SHA"
+
+      - name: 공개 블로그 품질 검사
+        run: bash .codex/checks/pull-request-quality.sh
