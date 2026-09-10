@@ -5,10 +5,15 @@
   "type": "module",
   "exports": {
     ".": "./src/index.js",
+    "./markdown.css": "./src/markdown.css",
     "./tokens.css": "./src/tokens.css"
   },
   "peerDependencies": {
     "next": "^16.3.4",
     "react": "19.2.0"
+  },
+  "dependencies": {
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
   }
 }

@@ -12,7 +12,7 @@ const validPost = {
   excerpt: "공개 글 계약을 검증하기 위한 예시입니다.",
   tags: ["기록"],
   sources: [],
-  body: [{ type: "paragraph", text: "검증할 본문입니다." }],
+  bodyMarkdown: "검증할 본문입니다.",
   seo: { title: "예시 글", description: "공개 글 계약 검증 예시입니다." },
 };
 
@@ -51,10 +51,9 @@ test("발행일은 실행 환경과 관계없이 한국 시간으로 표시한�
   assert.equal(formatPostDate("2026-09-08T00:30:00+09:00"), "2026. 09. 08");
 });
 
-test("본문은 지원하는 블록과 비어 있지 않은 내용을 요구한다", () => {
-  assert.throws(() => definePost({ ...validPost, body: [] }), /body/);
-  assert.throws(() => definePost({ ...validPost, body: [{ type: "image", text: "지원하지 않음" }] }), /body.type/);
-  assert.throws(() => definePost({ ...validPost, body: [{ type: "list", items: [] }] }), /목록 본문/);
+test("본문은 비어 있지 않은 Markdown 원문을 요구한다", () => {
+  assert.throws(() => definePost({ ...validPost, bodyMarkdown: "" }), /bodyMarkdown/);
+  assert.equal(definePost({ ...validPost, bodyMarkdown: "## 소제목\n\n본문" }).bodyMarkdown, "## 소제목\n\n본문");
 });
 
 test("공개된 주소만 상세 글로 찾는다", () => {

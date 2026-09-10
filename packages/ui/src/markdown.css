@@ -1,0 +1,65 @@
+.markdown-body {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.markdown-body a {
+  color: var(--leaf);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.markdown-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 32px 0;
+}
+
+.markdown-body code {
+  padding: 2px 5px;
+  background: color-mix(in srgb, var(--line) 42%, transparent);
+  font: .9em/1.6 monospace;
+}
+
+.markdown-body pre {
+  max-width: 100%;
+  padding: 18px;
+  overflow-x: auto;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.markdown-body pre code {
+  padding: 0;
+  background: transparent;
+  color: inherit;
+}
+
+.markdown-body table {
+  display: block;
+  width: 100%;
+  margin: 28px 0;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.markdown-body th,
+.markdown-body td {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  text-align: left;
+}
+
+.markdown-body th {
+  background: color-mix(in srgb, var(--line) 28%, transparent);
+}
+
+.markdown-body input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  accent-color: var(--leaf);
+}
