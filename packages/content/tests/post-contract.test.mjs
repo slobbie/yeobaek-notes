@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { definePost, findPublishedPostBySlug, formatPostDate, getPublishedPosts } from "../app/lib/content/post.js";
+import { definePost, findPublishedPostBySlug, formatPostDate, getPublishedPosts } from "../src/index.js";
 
 const validPost = {
   slug: "example-post",

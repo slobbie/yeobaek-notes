@@ -1,10 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { SiteFooter } from "../../components/site-footer.jsx";
-import { SiteHeader } from "../../components/site-header.jsx";
+import { findPublishedPostBySlug, formatPostDate, getPublishedPosts, postFixtures } from "@yeobaek/content";
+import { SiteFooter, SiteHeader } from "@yeobaek/ui";
 import { TrackedSourceLink } from "../../components/tracked-source-link.jsx";
-import { findPublishedPostBySlug, formatPostDate, getPublishedPosts } from "../../lib/content/post.js";
-import { postFixtures } from "../../lib/content/posts.js";
 import { createBlogPostingJsonLd, createPageMetadata, serializeJsonLd } from "../../seo.js";
 
 const posts = getPublishedPosts(postFixtures);

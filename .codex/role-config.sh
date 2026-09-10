@@ -2,14 +2,11 @@
 
 role_hint() {
   case "$1" in
-    AGENTS.md|.codex/*|.github/*|docs/*-conventions.md|docs/implementation-plan.md) printf '%s' harness-architect ;;
-    app/lib/*) printf '%s' data-layer-dev ;;
-    apps/*/src/lib/*|packages/content/*) printf '%s' data-layer-dev ;;
-    app/globals.css|app/components/ui/*) printf '%s' design-system-dev ;;
-    apps/*/src/styles.css|apps/*/src/components/ui/*|packages/ui/*) printf '%s' design-system-dev ;;
-    package.json|package-lock.json|next.config.mjs|worker/*|scripts/*|tests/*) printf '%s' frontend-architect ;;
-    app/*) printf '%s' frontend-dev ;;
-    apps/web/*|apps/admin/*) printf '%s' frontend-dev ;;
+    AGENTS.md|*/AGENTS.md|*/CLAUDE.md|.codex/*|.github/*|docs/*-conventions.md|docs/implementation-plan.md) printf '%s' harness-architect ;;
+    package.json|package-lock.json|apps/*/package.json|packages/*/package.json|apps/*/next.config.mjs|tests/*|apps/*/tests/*) printf '%s' frontend-architect ;;
+    apps/*/app/lib/*|packages/content/*) printf '%s' data-layer-dev ;;
+    apps/*/app/globals.css|apps/*/app/components/ui/*|packages/ui/*) printf '%s' design-system-dev ;;
+    apps/*/app/*) printf '%s' frontend-dev ;;
     apps/*|packages/*) printf '%s' frontend-architect ;;
     *) printf '%s' unassigned ;;
   esac

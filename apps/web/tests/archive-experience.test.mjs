@@ -1,8 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { getPublishedPosts, postFixtures } from "@yeobaek/content";
 import { createArchiveHref, filterPosts, getArchivePeriod, paginatePosts, parseArchiveState } from "../app/archive.js";
-import { getPublishedPosts } from "../app/lib/content/post.js";
-import { postFixtures } from "../app/lib/content/posts.js";
 
 const posts = getPublishedPosts(postFixtures);
 

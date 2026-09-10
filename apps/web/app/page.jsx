@@ -2,13 +2,11 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MagnifyingGlass } from "@phosphor-icons/react";
+import { formatPostDate, getPublishedPosts, POST_CATEGORIES, postFixtures } from "@yeobaek/content";
+import { SiteFooter, SiteHeader } from "@yeobaek/ui";
 import Link from "next/link";
 import { ARCHIVE_PAGE_SIZE, createArchiveHref, filterPosts, getArchivePeriod, paginatePosts, parseArchiveState } from "./archive.js";
-import { SiteFooter } from "./components/site-footer.jsx";
-import { SiteHeader } from "./components/site-header.jsx";
 import { track } from "./lib/analytics.js";
-import { formatPostDate, getPublishedPosts, POST_CATEGORIES } from "./lib/content/post.js";
-import { postFixtures } from "./lib/content/posts.js";
 import { createWebsiteJsonLd, serializeJsonLd } from "./seo.js";
 import styles from "./home.module.css";
 

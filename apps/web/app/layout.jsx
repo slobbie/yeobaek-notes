@@ -1,3 +1,4 @@
+import "@yeobaek/ui/tokens.css";
 import "./globals.css";
 import { AnalyticsReporter } from "./components/analytics-reporter.jsx";
 import { createPageMetadata, siteConfig } from "./seo.js";
