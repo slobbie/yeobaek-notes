@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { SiteFooter } from "../../components/site-footer.jsx";
 import { SiteHeader } from "../../components/site-header.jsx";
 import { TrackedSourceLink } from "../../components/tracked-source-link.jsx";
-import { findPublishedPostBySlug, formatPostDate, formatReadingTime, getPublishedPosts } from "../../lib/content/post.js";
+import { findPublishedPostBySlug, formatPostDate, getPublishedPosts } from "../../lib/content/post.js";
 import { postFixtures } from "../../lib/content/posts.js";
 import { createBlogPostingJsonLd, createPageMetadata, serializeJsonLd } from "../../seo.js";
 
@@ -64,11 +64,10 @@ export default async function PostPage({ params }) {
       <article className="article-detail" id="article">
         <Link className="back-link" href="/#archive">← 글 모아보기</Link>
         <header className="article-header">
-          <div className="post-meta"><time dateTime={post.publishedAt}>발행 {formatPostDate(post.publishedAt)}</time><span>수정 {formatPostDate(post.updatedAt)}</span><span>{post.category}</span><span>{post.format}</span></div>
+          <div className="post-meta"><time dateTime={post.publishedAt}>{formatPostDate(post.publishedAt)}</time>{post.updatedAt !== post.publishedAt && <span>{formatPostDate(post.updatedAt)} 수정</span>}<span>{post.category}</span></div>
           <h1>{post.title}</h1>
           <p className="article-lead">{post.excerpt}</p>
-          <dl className="article-context"><div><dt>읽는 시간</dt><dd>{formatReadingTime(post.readingTimeMinutes)}</dd></div><div><dt>작성 기준</dt><dd>{post.basis}</dd></div></dl>
-          <p className="article-tags">{post.tags.map((tag) => `#${tag}`).join("  ")}</p>
+          <p className="article-tags">{post.tags.map((tag) => `#${tag}`).join(" · ")}</p>
         </header>
         <PostBody blocks={post.body} />
         <Sources sources={post.sources} postSlug={post.slug} />

@@ -1,0 +1,92 @@
+.controls {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.filterGroup {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  white-space: nowrap;
+}
+
+.filterGroup button {
+  border: 0;
+  border-bottom: 1px solid transparent;
+  padding: 7px 0;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.filterGroup button:hover,
+.filterGroup .selected {
+  color: var(--leaf);
+  border-color: currentColor;
+}
+
+.search {
+  position: relative;
+  width: 300px;
+  margin-left: auto;
+  color: var(--ink);
+}
+
+.search svg {
+  position: absolute;
+  top: 50%;
+  left: 13px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.search input {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 13px 10px 41px;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  outline: none;
+  font-size: 14px;
+}
+
+.search input:focus {
+  border-color: var(--leaf);
+}
+
+.search input::placeholder {
+  color: #6e7876;
+}
+
+@media (max-width: 980px) {
+  .controls {
+    flex-wrap: wrap;
+    gap: 12px 22px;
+    padding: 17px 0;
+  }
+
+  .search {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .controls {
+    align-items: flex-start;
+  }
+
+  .filterGroup {
+    width: 100%;
+    max-width: 100%;
+    gap: 15px;
+    overflow-x: auto;
+  }
+}
