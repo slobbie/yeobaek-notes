@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { definePost, findPublishedPostBySlug, formatPostDate, getPublishedPosts } from "../src/index.js";
+import { definePost, findPublishedPostBySlug, formatPostDate, getPublishedPosts, mapPublishedPostRow } from "../src/index.js";
 
 const validPost = {
   slug: "example-post",
@@ -62,4 +62,34 @@ test("공개된 주소만 상세 글로 찾는다", () => {
   assert.equal(findPublishedPostBySlug([published, draft], "example-post"), published);
   assert.equal(findPublishedPostBySlug([published, draft], "draft-post"), null);
   assert.equal(findPublishedPostBySlug([published], "missing-post"), null);
+});
+
+test("DB 행을 공개 콘텐츠 계약으로 변환하고 출처 순서를 보존한다", () => {
+  const post = mapPublishedPostRow({
+    slug: "database-post",
+    status: "published",
+    title: "DB 글",
+    excerpt: "DB 행 변환 예시입니다.",
+    category: "기술",
+    tags: ["Supabase"],
+    body_markdown: "변환할 본문입니다.",
+    seo_title: "DB 글",
+    seo_description: "DB 행 변환을 검증합니다.",
+    published_at: "2026-09-10T00:00:00+00:00",
+    updated_at: "2026-09-11T00:00:00+00:00",
+    sources: [
+      { position: 2, title: "두 번째", publisher: "발행처", url: "https://example.com/2", accessed_at: "2026-09-11" },
+      { position: 1, title: "첫 번째", publisher: "발행처", url: "https://example.com/1", accessed_at: "2026-09-10" },
+    ],
+  });
+
+  assert.equal(post.bodyMarkdown, "변환할 본문입니다.");
+  assert.deepEqual(post.sources.map(({ title }) => title), ["첫 번째", "두 번째"]);
+  assert.equal("id" in post, false);
+});
+
+test("발행되지 않았거나 손상된 DB 행을 공개 콘텐츠로 허용하지 않는다", () => {
+  assert.throws(() => mapPublishedPostRow(null), /객체/);
+  assert.throws(() => mapPublishedPostRow({ status: "draft" }), /발행 상태/);
+  assert.throws(() => mapPublishedPostRow({ ...validPost, status: "published" }), /publishedAt/);
 });

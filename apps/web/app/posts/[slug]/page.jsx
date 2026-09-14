@@ -1,19 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { findPublishedPostBySlug, formatPostDate, getPublishedPosts, postFixtures } from "@yeobaek/content";
+import { formatPostDate } from "@yeobaek/content";
 import { MarkdownBody, SiteFooter, SiteHeader } from "@yeobaek/ui";
 import { TrackedSourceLink } from "../../components/tracked-source-link.jsx";
+import { getPublishedPostBySlug } from "../../lib/public-posts.js";
 import { createBlogPostingJsonLd, createPageMetadata, serializeJsonLd } from "../../seo.js";
-
-const posts = getPublishedPosts(postFixtures);
-
-export function generateStaticParams() {
-  return posts.map(({ slug }) => ({ slug }));
-}
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const post = findPublishedPostBySlug(posts, slug);
+  const post = await getPublishedPostBySlug(slug);
   if (!post) return { title: "글을 찾을 수 없습니다", robots: { index: false, follow: false } };
 
   return createPageMetadata({
@@ -39,7 +34,7 @@ function Sources({ sources, postSlug }) {
 
 export default async function PostPage({ params }) {
   const { slug } = await params;
-  const post = findPublishedPostBySlug(posts, slug);
+  const post = await getPublishedPostBySlug(slug);
   if (!post) notFound();
   const jsonLd = createBlogPostingJsonLd(post);
 

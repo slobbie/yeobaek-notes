@@ -1,6 +1,6 @@
-import { postFixtures } from "@yeobaek/content";
+import { listPublishedPosts } from "./lib/public-posts.js";
 import { createSitemapEntries } from "./seo.js";
 
-export default function sitemap() {
-  return createSitemapEntries(postFixtures);
+export default async function sitemap() {
+  return createSitemapEntries(await listPublishedPosts());
 }

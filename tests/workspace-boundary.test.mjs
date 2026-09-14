@@ -44,3 +44,18 @@ test("관리자 소스는 브라우저 공개 환경 변수를 사용하지 않�
     assert.doesNotMatch(source, /NEXT_PUBLIC_/, "관리자 실행 코드에서 공개 환경 변수 접두사를 사용하고 있습니다.");
   }
 });
+
+test("공개 웹은 관리자용 Supabase 키와 쓰기 API를 포함하지 않는다", async () => {
+  const webAppRoot = new URL("../apps/web/app/", import.meta.url);
+  const entries = await readdir(webAppRoot, { recursive: true, withFileTypes: true });
+  const sourceFiles = entries.filter((entry) =>
+    entry.isFile()
+    && /\.(?:js|jsx|mjs|ts|tsx)$/.test(entry.name),
+  );
+
+  for (const entry of sourceFiles) {
+    const source = await readFile(new URL(`${entry.parentPath}/${entry.name}`, "file:"), "utf8");
+    assert.doesNotMatch(source, /SUPABASE_(?:SERVICE_ROLE|SECRET)_KEY/);
+    assert.doesNotMatch(source, /\.from\(["'](?:posts|post_sources)["']\)\s*\.(?:insert|update|upsert|delete)\(/s);
+  }
+});

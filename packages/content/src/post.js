@@ -71,6 +71,43 @@ export function definePost(input) {
   });
 }
 
+export function mapPublishedPostRow(row) {
+  if (!row || typeof row !== "object" || Array.isArray(row)) {
+    throw new TypeError("공개 글 데이터는 객체여야 합니다.");
+  }
+  if (row.status !== "published") {
+    throw new TypeError("공개 글 저장소는 발행 상태의 글만 반환해야 합니다.");
+  }
+
+  const sources = Array.isArray(row.sources)
+    ? row.sources
+      .toSorted((left, right) => left.position - right.position)
+      .map((source) => ({
+        title: source.title,
+        publisher: source.publisher,
+        url: source.url,
+        accessedAt: source.accessed_at,
+      }))
+    : null;
+
+  return definePost({
+    slug: row.slug,
+    status: row.status,
+    title: row.title,
+    excerpt: row.excerpt,
+    category: row.category,
+    tags: row.tags,
+    bodyMarkdown: row.body_markdown,
+    publishedAt: row.published_at,
+    updatedAt: row.updated_at,
+    sources,
+    seo: {
+      title: row.seo_title,
+      description: row.seo_description,
+    },
+  });
+}
+
 export function getPublishedPosts(posts) {
   return posts
     .filter((post) => post.status === "published")
