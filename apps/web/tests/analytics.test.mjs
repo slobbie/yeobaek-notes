@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createAnalyticsEvent, getSourceHost, normalizeAnalyticsPath, observeAnalytics, track } from "../app/lib/analytics.js";
+import { createAnalyticsEvent, getSourceHost, normalizeAnalyticsPath, observeAnalytics, sendAnalyticsEvent, track } from "../app/lib/analytics.js";
 
 const context = {
   occurred_at: "2026-09-09T10:00:00+09:00",
@@ -41,6 +41,10 @@ test("정의되지 않은 이벤트와 속성값은 거부한다", () => {
     () => createAnalyticsEvent("filter_applied", { filter_type: "category", value: "경제" }, context),
     /허용되지 않은 분석 속성/,
   );
+  assert.throws(
+    () => createAnalyticsEvent("filter_applied", { value: "email@example.com" }, context),
+    /허용되지 않은 값/,
+  );
 });
 
 test("출처 이벤트에는 전체 주소 대신 hostname만 기록한다", () => {
@@ -49,6 +53,21 @@ test("출처 이벤트에는 전체 주소 대신 hostname만 기록한다", () 
 
 test("경로에는 검색 조건과 화면 위치를 남기지 않는다", () => {
   assert.equal(normalizeAnalyticsPath("/?query=경제#archive"), "/");
+  assert.throws(() => normalizeAnalyticsPath("/admin"), /공개 블로그 경로/);
+});
+
+test("수집 함수는 검증된 이벤트만 JSON으로 전송한다", async () => {
+  const calls = [];
+  const event = createAnalyticsEvent("page_viewed", {}, context);
+  const sent = await sendAnalyticsEvent("https://example.supabase.co/functions/v1/collect-analytics", event, async (url, options) => {
+    calls.push({ url, options });
+    return new Response(null, { status: 202 });
+  });
+
+  assert.equal(sent, true);
+  assert.equal(calls[0].options.keepalive, true);
+  assert.deepEqual(JSON.parse(calls[0].options.body), event);
+  assert.equal(await sendAnalyticsEvent("", event), false);
 });
 
 test("서버 렌더링에서는 브라우저 이벤트를 만들지 않는다", () => {

@@ -2,6 +2,7 @@ import "@yeobaek/ui/tokens.css";
 import "@yeobaek/ui/markdown.css";
 import "./globals.css";
 import { AnalyticsReporter } from "./components/analytics-reporter.jsx";
+import { getAnalyticsEndpoint } from "./lib/analytics-endpoint.js";
 import { createPageMetadata, siteConfig } from "./seo.js";
 
 const homeTitle = "여백의 노트 — 생각을 기록하는 개인 아카이브";
@@ -35,5 +36,5 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  return <html lang="ko"><body><AnalyticsReporter />{children}</body></html>;
+  return <html lang="ko"><body><AnalyticsReporter endpoint={getAnalyticsEndpoint()} />{children}</body></html>;
 }

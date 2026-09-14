@@ -2,23 +2,28 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { observeAnalytics, track } from "../lib/analytics.js";
+import { observeAnalytics, sendAnalyticsEvent, track } from "../lib/analytics.js";
 
-export function AnalyticsReporter() {
+export function AnalyticsReporter({ endpoint }) {
   const pathname = usePathname();
   const lastTrackedPath = useRef(null);
 
   useEffect(() => {
-    const stopObserving = process.env.NODE_ENV === "development"
-      ? observeAnalytics((event) => console.info("[여백의 노트 분석]", event))
-      : () => {};
+    const stopObserving = observeAnalytics((event) => {
+      if (process.env.NODE_ENV === "development") console.info("[여백의 노트 분석]", event);
+      void sendAnalyticsEvent(endpoint, event).catch(() => {});
+    });
 
     if (lastTrackedPath.current !== pathname) {
       lastTrackedPath.current = pathname;
-      track("page_viewed");
+      try {
+        track("page_viewed");
+      } catch {
+        // 공개 계약 밖의 404 경로는 저장하지 않는다.
+      }
     }
     return stopObserving;
-  }, [pathname]);
+  }, [endpoint, pathname]);
 
   return null;
 }

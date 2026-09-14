@@ -64,6 +64,7 @@ export function PostEditor({
       <div className="admin-brand"><strong>여백의 노트</strong><span>관리자</span></div>
       <nav aria-label="관리할 글">
         <a aria-current={!initialPost ? "page" : undefined} href="/">새 글</a>
+        <a href="/analytics">지표</a>
         {posts.map((post) => <a
           aria-current={post.id === initialPost?.id ? "page" : undefined}
           href={`/?post=${encodeURIComponent(post.id)}`}
