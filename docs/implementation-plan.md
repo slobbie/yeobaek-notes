@@ -46,17 +46,17 @@
 | 순서 | ID | 상태 | 작업 | 권장 브랜치 | PR 제목 | 완료 조건 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 16 | B-01 | 병합됨 | 콘텐츠·출처·분석 스키마와 RLS | `feat/db-content-schema` | `feat(db): 공개 콘텐츠 스키마와 RLS를 추가한다` | 발행 글 공개 읽기와 로컬 관리자 쓰기 정책이 마이그레이션으로 재현된다. |
-| 17 | B-02 | PR 검토 | 공개 웹 읽기 저장소 | `feat/web-content-repository` | `feat(content): 공개 글 저장소를 Supabase에 연결한다` | 공개 앱은 발행 글만 읽고 fixture 없이 목록·상세·SEO 표면을 제공한다. |
-| 18 | B-03 | 대기 | 로컬 관리자 쓰기 저장소 | `feat/admin-content-repository` | `feat(admin): 로컬 관리자 콘텐츠 저장소를 연결한다` | 로컬의 service role로 임시 저장·발행·수정을 수행하고 공개 번들에는 키가 없다. |
-| 19 | B-04 | 대기 | 비식별 지표 저장·집계 | `feat/analytics-persistence` | `feat(analytics): 블로그 지표 저장과 조회를 연결한다` | 정의된 이벤트만 저장하고 기간·글·유입 기준 지표를 관리자에서 확인한다. |
+| 17 | B-02 | 병합됨 | 공개 웹 읽기 저장소 | `feat/web-content-repository` | `feat(content): 공개 글 저장소를 Supabase에 연결한다` | 공개 앱은 발행 글만 읽고 fixture 없이 목록·상세·SEO 표면을 제공한다. |
+| 18 | B-03 | 병합됨 | 로컬 관리자 쓰기 저장소 | `feat/admin-content-repository` | `feat(admin): 로컬 관리자 콘텐츠 저장소를 연결한다` | 로컬의 service role로 임시 저장·발행·수정을 수행하고 공개 번들에는 키가 없다. |
+| 19 | B-04 | 병합됨 | 비식별 지표 저장·집계 | `feat/analytics-persistence` | `feat(analytics): 블로그 지표 저장과 조회를 연결한다` | 정의된 이벤트만 저장하고 기간·글·유입 기준 지표를 관리자에서 확인한다. |
 
 ## 4. 통합 검증과 공개 배포
 
 | 순서 | ID | 상태 | 작업 | 권장 브랜치 | PR 제목 | 완료 조건 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 20 | Q-01 | 대기 | 운영 전 통합 검증 | `chore/production-readiness` | `chore(repo): 공개 운영 전환을 검증한다` | 공개·관리자 경계, RLS, 실데이터, 분석, 브라우저, 접근성, SEO/GEO, 보안, 백업·되돌리기를 검증한다. |
+| 20 | Q-01 | 진행 중 | 운영 전 통합 검증 | `chore/production-readiness` | `chore(repo): 공개 운영 전환을 검증한다` | 공개·관리자 경계, RLS, 실데이터, 분석, 브라우저, 접근성, SEO/GEO, 보안, 백업·되돌리기를 검증한다. |
 | 21 | D-01 | 대기 | `develop → main` 병합과 Vercel 공개 배포 | `ci/vercel-public-deploy` | `ci(blog): 공개 블로그 배포를 연결한다` | 전체 검증이 통과한 공개 블로그만 Vercel에 배포하고 운영 주소를 재검증한다. |
 
 ## 지금 할 일
 
-현재 작업은 `B-02`다. 공개 웹의 목록·상세·SEO 표면을 서버 전용 Supabase 읽기 저장소에 연결한다.
+현재 작업은 `Q-01`이다. 공개 운영 전환에 필요한 통합 검증 근거와 복구 절차를 확정한다.
