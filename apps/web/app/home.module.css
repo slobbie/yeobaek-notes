@@ -62,7 +62,7 @@
 }
 
 .search input::placeholder {
-  color: #6e7876;
+  color: var(--muted);
 }
 
 .loadMore {
