@@ -1,0 +1,83 @@
+export const ANALYTICS_EVENT_SCHEMAS = Object.freeze({
+  page_viewed: Object.freeze({}),
+  post_opened: Object.freeze({ post_slug: "slug", category: ["경제", "기술", "생활", "관찰", "리뷰"] }),
+  search_used: Object.freeze({ query_length: "count", results_count: "count" }),
+  filter_applied: Object.freeze({ value: ["경제", "기술", "생활", "관찰", "리뷰"] }),
+  archive_expanded: Object.freeze({ visible_count: "count", total_count: "count" }),
+  source_opened: Object.freeze({ post_slug: "slug", source_host: "hostname" }),
+});
+
+export const ANALYTICS_EVENT_NAMES = Object.freeze(Object.keys(ANALYTICS_EVENT_SCHEMAS));
+
+function assertPlainObject(value, label) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new TypeError(`${label}은 객체여야 합니다.`);
+  }
+}
+
+function assertProperty(name, value, rule) {
+  if (rule === "count" && (!Number.isInteger(value) || value < 0 || value > 10000)) {
+    throw new TypeError(`${name}은 0~10000의 정수여야 합니다.`);
+  }
+  if (rule === "slug" && (typeof value !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value))) {
+    throw new TypeError(`${name}은 소문자 영문 slug여야 합니다.`);
+  }
+  if (rule === "hostname" && (
+    typeof value !== "string"
+    || value.length > 253
+    || !/^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/i.test(value)
+  )) {
+    throw new TypeError(`${name}은 공개 출처의 hostname여야 합니다.`);
+  }
+  if (Array.isArray(rule) && !rule.includes(value)) {
+    throw new TypeError(`${name}에 허용되지 않은 값입니다.`);
+  }
+}
+
+export function normalizeAnalyticsPath(path) {
+  if (typeof path !== "string" || !path.startsWith("/")) {
+    throw new TypeError("page_path는 /로 시작해야 합니다.");
+  }
+  const normalized = path.split(/[?#]/, 1)[0] || "/";
+  if (normalized.length > 300 || !/^\/$|^\/about$|^\/posts\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(normalized)) {
+    throw new TypeError("page_path는 공개 블로그 경로여야 합니다.");
+  }
+  return normalized;
+}
+
+export function getSourceHost(url) {
+  const parsed = new URL(url);
+  if (!["http:", "https:"].includes(parsed.protocol)) {
+    throw new TypeError("출처는 HTTP 또는 HTTPS 주소여야 합니다.");
+  }
+  return parsed.hostname;
+}
+
+export function createAnalyticsEvent(name, properties, context) {
+  const schema = ANALYTICS_EVENT_SCHEMAS[name];
+  if (!schema) throw new TypeError(`정의되지 않은 분석 이벤트입니다: ${name}`);
+  assertPlainObject(properties, "properties");
+  assertPlainObject(context, "context");
+
+  const expectedKeys = Object.keys(schema);
+  const receivedKeys = Object.keys(properties);
+  const unexpectedKey = receivedKeys.find((key) => !expectedKeys.includes(key));
+  const missingKey = expectedKeys.find((key) => !receivedKeys.includes(key));
+  if (unexpectedKey) throw new TypeError(`허용되지 않은 분석 속성입니다: ${unexpectedKey}`);
+  if (missingKey) throw new TypeError(`필수 분석 속성이 없습니다: ${missingKey}`);
+
+  expectedKeys.forEach((key) => assertProperty(key, properties[key], schema[key]));
+  if (name === "archive_expanded" && properties.visible_count > properties.total_count) {
+    throw new TypeError("visible_count는 total_count보다 클 수 없습니다.");
+  }
+
+  const occurredAt = new Date(context.occurred_at);
+  if (Number.isNaN(occurredAt.getTime())) throw new TypeError("occurred_at은 유효한 날짜여야 합니다.");
+
+  return Object.freeze({
+    name,
+    occurred_at: occurredAt.toISOString(),
+    page_path: normalizeAnalyticsPath(context.page_path),
+    properties: Object.freeze({ ...properties }),
+  });
+}
