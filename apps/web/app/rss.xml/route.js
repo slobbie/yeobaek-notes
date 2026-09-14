@@ -1,10 +1,8 @@
-import { postFixtures } from "@yeobaek/content";
+import { listPublishedPosts } from "../lib/public-posts.js";
 import { createRssFeed } from "../seo.js";
 
-export const dynamic = "force-static";
-
-export function GET() {
-  return new Response(createRssFeed(postFixtures), {
+export async function GET() {
+  return new Response(createRssFeed(await listPublishedPosts()), {
     headers: {
       "Content-Type": "application/rss+xml; charset=utf-8",
       "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
