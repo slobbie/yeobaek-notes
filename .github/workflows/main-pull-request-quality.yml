@@ -1,9 +1,9 @@
-name: develop PR 기본 품질 검사
+name: main PR 기본 품질 검사
 
 on:
   pull_request:
     branches:
-      - develop
+      - main
     types:
       - opened
       - synchronize
@@ -14,7 +14,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: develop-pr-quality-${{ github.event.pull_request.number }}
+  group: main-pr-quality-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
