@@ -14,7 +14,7 @@
     "build": "npm run build:web",
     "build:web": "npm run build --workspace @yeobaek/web",
     "start": "npm run start --workspace @yeobaek/web",
-    "test": "node --test packages/content/tests/*.test.mjs apps/web/tests/*.test.mjs tests/*.test.mjs",
+    "test": "node --test packages/content/tests/*.test.mjs apps/admin/app/lib/*.test.mjs apps/web/tests/*.test.mjs tests/*.test.mjs",
     "check:staged": "git diff --check --cached",
     "commitlint": "commitlint --edit",
     "prepare": "husky"
