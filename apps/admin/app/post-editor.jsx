@@ -1,14 +1,30 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useActionState, useMemo, useState } from "react";
 import { checkPostForPublication } from "@yeobaek/content";
 import { MarkdownBody } from "@yeobaek/ui";
+import { savePostAction } from "./actions.js";
 import { splitEditorTags } from "./post-editor-model.js";
 
 const EMPTY_SOURCE = { title: "", publisher: "", url: "", accessedAt: "" };
 
-export function PostEditor({ categories, existingSlugs, initialDraft, originalSlug, today }) {
+const INITIAL_ACTION_STATE = { status: "idle", message: "" };
+
+export function PostEditor({
+  categories,
+  connectionError,
+  existingSlugs,
+  initialDraft,
+  initialPost,
+  notice,
+  originalSlug,
+  posts,
+  today,
+}) {
   const [draft, setDraft] = useState(initialDraft);
+  const [actionState, formAction, pending] = useActionState(savePostAction, INITIAL_ACTION_STATE);
+  const serializedDraft = JSON.stringify(draft);
+  const currentActionMessage = actionState.payload === serializedDraft ? actionState.message : "";
   const tags = useMemo(() => splitEditorTags(draft.tags), [draft.tags]);
   const publicationCheck = useMemo(
     () => checkPostForPublication(draft, { existingSlugs, originalSlug, today }),
@@ -46,7 +62,15 @@ export function PostEditor({ categories, existingSlugs, initialDraft, originalSl
   return <main className="admin-app" data-app-boundary="YEOBAEK_LOCAL_ADMIN_ONLY">
     <header className="admin-header">
       <div className="admin-brand"><strong>여백의 노트</strong><span>관리자</span></div>
-      <p className="local-state">로컬 초안</p>
+      <nav aria-label="관리할 글">
+        <a aria-current={!initialPost ? "page" : undefined} href="/">새 글</a>
+        {posts.map((post) => <a
+          aria-current={post.id === initialPost?.id ? "page" : undefined}
+          href={`/?post=${encodeURIComponent(post.id)}`}
+          key={post.id}
+        >{post.title || post.slug}<span>{post.status === "published" ? "발행" : "초안"}</span></a>)}
+      </nav>
+      <p className="local-state">{initialPost?.status === "published" ? "발행 글" : "로컬 초안"}</p>
     </header>
 
     <div className="editor-layout">
@@ -56,7 +80,13 @@ export function PostEditor({ categories, existingSlugs, initialDraft, originalSl
           <h1 id="editor-title">{draft.title || "제목 없는 글"}</h1>
         </div>
 
-        <form className="post-form" onSubmit={(event) => event.preventDefault()}>
+        <form action={formAction} className="post-form">
+          <input name="postId" type="hidden" value={initialPost?.id ?? ""} />
+          <input name="payload" type="hidden" value={serializedDraft} />
+          {(connectionError || currentActionMessage || notice) && <p
+            className={connectionError || currentActionMessage ? "save-message save-error" : "save-message save-success"}
+            role={connectionError || currentActionMessage ? "alert" : "status"}
+          >{connectionError || currentActionMessage || notice}</p>}
           <fieldset>
             <legend>기본 정보</legend>
             <div className="field field-wide"><label htmlFor="post-title">제목</label><input aria-invalid={invalidFieldIds.has("post-title")} id="post-title" value={draft.title} onChange={updateDraft("title")} /></div>
@@ -106,6 +136,15 @@ export function PostEditor({ categories, existingSlugs, initialDraft, originalSl
               <textarea aria-invalid={invalidFieldIds.has("seo-description")} id="seo-description" rows="3" value={draft.seoDescription} onChange={updateDraft("seoDescription")} />
             </div>
           </fieldset>
+
+          <div className="save-actions">
+            <button disabled={pending || Boolean(connectionError)} name="intent" type="submit" value="draft">
+              {pending ? "저장 중…" : initialPost?.status === "published" ? "수정 저장" : "초안 저장"}
+            </button>
+            <button disabled={pending || !publicationCheck.ready || Boolean(connectionError)} name="intent" type="submit" value="publish">
+              {pending ? "처리 중…" : initialPost?.status === "published" ? "검사 후 수정" : "발행"}
+            </button>
+          </div>
         </form>
       </section>
 
@@ -139,7 +178,7 @@ export function PostEditor({ categories, existingSlugs, initialDraft, originalSl
           <div className="preview-bar"><h2 id="preview-title">미리보기</h2><span>공개 글</span></div>
           <article className="post-preview">
             <header className="preview-header">
-              <div className="preview-meta"><span>미발행</span><span>{draft.category}</span></div>
+              <div className="preview-meta"><span>{initialPost?.status === "published" ? "발행" : "미발행"}</span><span>{draft.category}</span></div>
               <h1>{draft.title || "제목 없는 글"}</h1>
               <p className="preview-excerpt">{draft.excerpt || "글의 요약이 여기에 표시됩니다."}</p>
               {tags.length > 0 && <p className="preview-tags">{tags.map((tag) => `#${tag}`).join(" · ")}</p>}
